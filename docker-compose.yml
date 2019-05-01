@@ -1,0 +1,20 @@
+version: '3'
+services:
+  web-app:
+    build:
+      context: .      #get the build directory from the root 
+      dockerfile: Dockerfile.dev       # mention the docker file to refer it to build .
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules    # node_modules will be taken from the container , as it generated there while doing npm install
+      - .:/app                # apart from node_modules get reference of code from root directory from root to container
+  
+  tests:                #2nd cntainer for running the live tests/refernce
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
